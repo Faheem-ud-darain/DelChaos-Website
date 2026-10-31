@@ -85,6 +85,12 @@
   color-scheme: dark;
 }
 
+/* The theme wipe (hooks/useTheme.ts): the browser's own cross-fade is switched off and a circle is drawn instead. The start circle is set here too, so the new theme is never seen full size before the animation attaches. */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+:root[data-theme-wipe='grow']::view-transition-new(root) { z-index: 2; clip-path: circle(0px at var(--wipe-x) var(--wipe-y)); }
+:root[data-theme-wipe='shrink']::view-transition-old(root) { z-index: 2; }
+
 html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
 body { background: var(--bg); color: var(--fg); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 html { scrollbar-color: var(--line) var(--bg); }

@@ -7,6 +7,7 @@ import { Hero } from './components/sections/Hero';
 import { HowItWorks } from './components/sections/HowItWorks';
 import { Mobile } from './components/sections/Mobile';
 import { Nav } from './components/sections/Nav';
+import { Problems } from './components/sections/Problems';
 import { Ownership } from './components/sections/Ownership';
 import { Roles } from './components/sections/Roles';
 import { ScrollProgress } from './components/ui/ScrollProgress';
@@ -20,6 +21,7 @@ export default function App() {
         <Hero />
         <BeforeAfter />
         <Features />
+        <Problems />
         <Roles />
         <HowItWorks />
         <Mobile />
