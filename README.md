@@ -13,10 +13,14 @@ npm run lint
 
 ## Deploy on Cloudflare Pages
 
+The build prerenders the page (`scripts/prerender.mjs`), so crawlers get real HTML, and writes `sitemap.xml`, `robots.txt` and `llms.txt`.
+
 1. Push this folder to its own Git repository.
 2. In Cloudflare, create a Pages project from that repository.
 3. Build command: `npm run build`. Output directory: `dist`.
-4. Add the site's own custom domain under the project's Custom domains.
+4. Set `SITE_URL` (build variable, or in `.env`) to the public address, for example `https://delchaos.pages.dev`. Change it to the custom domain once connected; canonical URLs, social tags, structured data and the sitemap all follow it.
+
+Or from the terminal: `npm run deploy` (needs `wrangler login` once).
 
 `public/_headers` sets the security headers and long caching for built files.
 
