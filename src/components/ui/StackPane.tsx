@@ -23,7 +23,7 @@ export function StackPane({ children, layer, target, sticky = true }: { children
       ref={ref}
       data-stack-target={target}
       style={{ zIndex: layer, top: sticky ? top : undefined }}
-      className={`relative bg-bg shadow-[0_-30px_60px_-30px_rgb(0_0_0/0.45)] ${sticky ? 'sticky' : ''}`}
+      className={`relative overflow-x-clip bg-bg shadow-[0_-30px_60px_-30px_rgb(0_0_0/0.45)] ${sticky ? 'sticky' : ''}`}
     >
       {children}
     </div>

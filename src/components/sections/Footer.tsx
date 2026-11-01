@@ -13,7 +13,7 @@ export function Footer() {
   const g = LOGO.full;
   return (
     <footer className="relative overflow-clip border-t border-line bg-bg">
-      <Container className="relative z-10 grid gap-12 pt-14 sm:grid-cols-2 md:grid-cols-4 md:pt-20">
+      <Container className="relative z-10 grid grid-cols-1 gap-8 pt-10 sm:grid-cols-2 sm:gap-12 md:pt-20 md:grid-cols-4">
         <div>
           <Label>Explore</Label>
           <nav aria-label="Footer" className="flex flex-col gap-2.5 text-[15px]">

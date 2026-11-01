@@ -28,7 +28,7 @@ export function Features() {
   return (
     <Section id="features">
       <SectionHeading title="Everything a growing team needs, in one system." />
-      <div className="mt-14 grid gap-5 md:grid-cols-6">
+      <div className="mt-10 grid grid-cols-1 gap-4 md:mt-14 md:grid-cols-6 md:gap-5">
         {CELLS.map(({ title, body, Preview, span, accent }, i) => (
           <Reveal key={title} from={i % 2 ? 'right' : 'left'} className={span}>
             <Tile tone={accent ? 'accent' : 'plain'} className="h-full" title={title} body={body}>

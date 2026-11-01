@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type RefObject } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type RefObject } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 
@@ -12,7 +12,36 @@ const BEAMS = [{ position: 0.18, seed: 7 }, { position: 0.82, seed: 3 }] as cons
  * The hero's light: two lime beams that drop from the top of the screen, either side of the headline, and splash over the product window. The glow under it is plain CSS,
  * so the page already has its light on phones, data-saver connections and reduced motion, where the shader is never fetched.
  */
-export function LaserBackdrop({ surfaceRef, onLit, beams = BEAMS, enabled = true, className = '' }: { surfaceRef: RefObject<HTMLElement | null>; onLit?: () => void; beams?: readonly { position: number; seed: number }[]; enabled?: boolean; className?: string }) {
+export function LaserBackdrop({ surfaceRef, onLit, beams = BEAMS, surfaceFractions, enabled = true, className = '' }: {
+  surfaceRef: RefObject<HTMLElement | null>;
+  onLit?: () => void;
+  beams?: readonly { position: number; seed: number }[];
+  /** Place each beam this far across the surface (0 is its left edge, 1 its right) instead of across the screen, so the beams stay on the window at any screen width. */
+  surfaceFractions?: readonly number[];
+  enabled?: boolean;
+  className?: string;
+}) {
+  const root = useRef<HTMLDivElement>(null);
+  const [anchored, setAnchored] = useState<number[] | null>(null);
+  useEffect(() => {
+    const box = root.current;
+    const surface = surfaceRef.current;
+    if (!surfaceFractions || !box || !surface) return;
+    const measure = () => {
+      const area = box.getBoundingClientRect();
+      const rect = surface.getBoundingClientRect();
+      const width = surface.offsetWidth; // layout width, so the scale-in of the window does not shift the beams
+      if (!area.width || !width) return;
+      const left = rect.left + rect.width / 2 - width / 2;
+      setAnchored(surfaceFractions.map(f => (left + f * width - area.left) / area.width));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    observer.observe(surface);
+    return () => observer.disconnect();
+  }, [surfaceRef, surfaceFractions]);
+  const placed = surfaceFractions ? beams.map((b, i) => ({ ...b, position: anchored?.[i] ?? b.position })) : beams;
   const { theme } = useTheme();
   const [on, setOn] = useState(false);
   useEffect(() => {
@@ -32,11 +61,11 @@ export function LaserBackdrop({ surfaceRef, onLit, beams = BEAMS, enabled = true
     return () => window.clearTimeout(timer);
   }, [on, onLit]);
   return (
-    <div aria-hidden="true" className={`pointer-events-none ${className}`}>
+    <div ref={root} aria-hidden="true" className={`pointer-events-none ${className}`}>
       <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(50%_55%_at_50%_0%,color-mix(in_oklab,var(--accent)_28%,transparent),transparent_75%)]" />
       <ErrorBoundary>
         <Suspense fallback={null}>
-          {on && beams.map(beam => (
+          {on && placed.map(beam => (
             <div key={beam.position} className="absolute inset-0">
             <LaserFlow
               surfaceRef={surfaceRef}
