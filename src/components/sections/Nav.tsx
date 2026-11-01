@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { useActiveSection } from '../../hooks/useActiveSection';
+import { useActiveSection } from '../../hooks/useStack';
 import { contactHref, NAV_LINKS, SITE } from '../../site';
 import { Button } from '../ui/Button';
 import { Container } from '../ui/Container';

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="155 148 724 724" width="256" height="256" style="overflow:visible"><title>DelChaos animated logo</title><style>
+.d,.c,.h,.b{transform-box:fill-box;transform-origin:center}
+.c{transform-origin:58% 50%;animation:c 7s cubic-bezier(.3,0,.2,1) infinite}
+.d{animation:d 7s cubic-bezier(.3,0,.2,1) infinite}
+.h{animation:h 7s cubic-bezier(.3,0,.2,1) infinite}
+.b{transform-origin:50% 100%;animation:b 7s cubic-bezier(.3,0,.2,1) infinite}
+@keyframes c{0%,22%{transform:rotate(0)}32%{transform:rotate(-5deg)}42%,58%{transform:rotate(0)}62%{transform:rotate(-90deg)}67%{transform:rotate(140deg)}73%{transform:rotate(-12deg)}78%,100%{transform:rotate(0)}}
+@keyframes d{0%,58%{transform:scale(1)}62%{transform:scale(1.1)}67%{transform:scale(.92)}73%{transform:scale(1.03)}78%,100%{transform:scale(1)}}
+@keyframes h{0%,100%{transform:translateY(0) scale(1)}14%{transform:translateY(-5%) scale(1.02,.98)}28%{transform:translateY(0) scale(1)}58%{transform:translateY(0) scale(1)}62%{transform:translateY(-34%) scale(.94,1.08)}68%{transform:translateY(10%) scale(1.1,.88)}74%{transform:translateY(-4%) scale(.98,1.02)}80%{transform:translateY(0) scale(1)}}
+@keyframes b{0%,58%,100%{transform:scaleY(1)}62%{transform:scaleY(.88)}68%{transform:scaleY(1.06)}74%{transform:scaleY(.98)}80%{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.c,.d,.h,.b{animation:none}}</style><rect x="155.0" y="148.0" width="724.0" height="724.0" fill="#0A0A0A"/><path class="d" fill="#FFFFFF" fill-rule="evenodd" d="M246.5 670.5A161.0 161.0 0 1 0 568.5 670.5A161.0 161.0 0 1 0 246.5 670.5ZM304.5 670.5A103.0 103.0 0 1 0 510.5 670.5A103.0 103.0 0 1 0 304.5 670.5Z"/><path class="c" fill="#FFFFFF" d="M779.23 550.85A161.0 161.0 0 1 0 779.23 790.15A29.0 29.0 0 0 0 740.42 747.04A103.0 103.0 0 1 1 740.42 593.96A29.0 29.0 0 0 0 779.23 550.85Z"/><circle class="h" cx="539.5" cy="260.5" r="72" fill="#C4EE3F"/><path class="b" fill="#C4EE3F" fill-rule="evenodd" d="M477.88 421.86A62 62 0 1 1 601.12 421.86L572.3 680.65A33 33 0 0 1 506.7 680.65ZM539.5 486L526.7 396.5A13 13 0 1 1 552.3 396.5Z"/></svg>

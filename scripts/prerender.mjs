@@ -22,6 +22,8 @@ const jsonLd = [
     name: 'DelChaos',
     url: siteUrl,
     logo: `${siteUrl}/favicon.svg`,
+    email: 'studiosparx@gmail.com',
+    contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'studiosparx@gmail.com', telephone: '+905488281864', availableLanguage: 'English' },
   },
   {
     '@context': 'https://schema.org',
