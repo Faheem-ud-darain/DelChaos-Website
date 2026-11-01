@@ -6,7 +6,7 @@ const YEAR = new Date().getFullYear();
 
 const PRODUCT = ['Attendance', 'Payroll', 'Leave', 'Onboarding', 'Chat and tickets'] as const;
 
-const Label = ({ children }: { children: string }) => <h2 className="mb-5 font-mono text-xs tracking-wide text-muted">{children}</h2>;
+const Label = ({ children }: { children: string }) => <p className="mb-5 font-mono text-xs tracking-wide text-muted">{children}</p>;
 
 /** The closing wall: three short columns, then the logo at full width on a wash of the accent. */
 export function Footer() {

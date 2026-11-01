@@ -1,62 +1,107 @@
 import { CheckIcon, XIcon } from '@phosphor-icons/react';
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react';
-import { useRef } from 'react';
-import { Backdrop3D } from '../three/Backdrop3D';
+import { motion, useMotionValue, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { Container } from '../ui/Container';
 import { SectionHeading } from '../ui/SectionHeading';
+import { PointField } from './PointField';
 
-const WITHOUT = [
-  'Attendance in a spreadsheet someone forgets to update',
-  'Leave requests lost in a group chat',
-  'Payroll worked out by hand every month',
-  'Deductions nobody can explain',
-  'Joining forms on paper or in email',
-] as const;
+// Each point is one piece of work, said twice: how it is handled without DelChaos, and how it is handled with it. `scatter` is where the
+// point first lies on the screen (as fractions of the stage) and how crooked it is.
+const POINTS: { tag: string; without: string; with: string; scatter: { x: number; y: number; rot: number } }[] = [
+  { tag: 'Attendance', without: 'Attendance in a spreadsheet someone forgets to update', with: 'Shifts, locations and absences recorded as they happen', scatter: { x: 0.36, y: 0.33, rot: -6 } },
+  { tag: 'Leave', without: 'Leave requests lost in a group chat', with: 'Leave requested, approved and tracked in one place', scatter: { x: 0.03, y: 0.56, rot: 5 } },
+  { tag: 'Payroll', without: 'Payroll worked out by hand every month', with: 'Payroll built from real attendance and leave', scatter: { x: 0.5, y: 0.74, rot: -4 } },
+  { tag: 'Deductions', without: 'Deductions nobody can explain', with: 'Every deduction shown with its day and reason', scatter: { x: 0.6, y: 0.5, rot: 7 } },
+  { tag: 'Onboarding', without: 'Joining forms on paper or in email', with: 'New hires finish onboarding inside the app', scatter: { x: 0.04, y: 0.87, rot: -5 } },
+];
 
-const WITH = [
-  'Shifts, locations and absences recorded as they happen',
-  'Leave requested, approved and tracked in one place',
-  'Payroll built from real attendance and leave',
-  'Every deduction shown with its day and reason',
-  'New hires finish onboarding inside the app',
-] as const;
+const clamp = (v: number) => Math.min(1, Math.max(0, v));
 
-function Column({ title, items, good, opacity }: { title: string; items: readonly string[]; good?: boolean; opacity: MotionValue<number> | number }) {
-  const Icon = good ? CheckIcon : XIcon;
+/**
+ * One written point. Its row is laid out like a line in an index (the sentence, a label, a frosted bar behind), and the sentence is
+ * then thrown to its scatter spot with a transform. As `order` rises the sentence travels home and straightens, its words change from the
+ * problem to the fix, and the frosted row and label arrive around it. The finished list is real, aligned text.
+ */
+function Point({ item, index, order, stage }: { item: (typeof POINTS)[number]; index: number; order: MotionValue<number>; stage: RefObject<HTMLElement | null> }) {
+  const row = useRef<HTMLLIElement>(null);
+  const chip = useRef<HTMLDivElement>(null);
+  const ox = useMotionValue(0);
+  const oy = useMotionValue(0);
+  useEffect(() => {
+    const li = row.current;
+    const sentence = chip.current;
+    const box = stage.current;
+    if (!li || !sentence || !box) return;
+    const measure = () => {
+      const area = box.getBoundingClientRect();
+      const home = li.getBoundingClientRect();
+      ox.set(item.scatter.x * area.width - (home.left - area.left));
+      oy.set(item.scatter.y * area.height - (home.top - area.top + sentence.offsetTop));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, [item.scatter.x, item.scatter.y, ox, oy, stage]);
+  const p = useTransform(order, v => clamp((v - index * 0.06) / 0.45));
+  const x = useTransform([ox, p], ([o, q]: number[]) => o * (1 - q));
+  const y = useTransform([oy, p], ([o, q]: number[]) => o * (1 - q));
+  const rotate = useTransform(p, v => item.scatter.rot * (1 - v));
+  const was = useTransform(p, [0.1, 0.55], [1, 0]);
+  const now = useTransform(p, [0.45, 0.9], [0, 1]);
   return (
-    <motion.div style={{ opacity }} className={`rounded-2xl border bg-surface p-7 md:p-9 ${good ? 'border-accent-strong' : 'border-line'}`}>
-      <h3 className="text-xl font-semibold">{title}</h3>
-      <ul className="mt-6 space-y-4">
-        {items.map(item => (
-          <li key={item} className="flex items-start gap-3 leading-snug">
-            <Icon size={20} weight="bold" className={`mt-0.5 shrink-0 ${good ? 'text-accent-strong' : 'text-muted'}`} aria-hidden="true" />
-            {item}
-          </li>
-        ))}
-      </ul>
-    </motion.div>
+    <li ref={row} className="relative">
+      <motion.span aria-hidden="true" style={{ opacity: now }} className="absolute inset-0 rounded-2xl border border-fg/15 bg-fg/[0.06] shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] backdrop-blur-xl" />
+      <motion.span aria-hidden="true" style={{ opacity: now }} className="absolute right-5 top-1/2 hidden -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.16em] text-muted md:block">{item.tag}</motion.span>
+      <motion.div ref={chip} style={{ x, y, rotate }} className="relative flex w-fit max-w-full items-start gap-3 rounded-2xl px-5 py-3.5 text-lg leading-snug md:max-w-[min(100%,46rem)] md:text-2xl">
+        <motion.span aria-hidden="true" style={{ opacity: was }} className="absolute inset-0 rounded-2xl border border-fg/25 bg-fg/[0.09] shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_12px_32px_-12px_rgb(0_0_0/0.7)] backdrop-blur-xl" />
+        <span className="relative mt-1.5 h-5 w-5 shrink-0 md:mt-2">
+          <motion.span style={{ opacity: was }} className="absolute inset-0 text-fg"><XIcon size={20} weight="bold" aria-hidden="true" /></motion.span>
+          <motion.span style={{ opacity: now }} className="absolute inset-0 text-accent-strong"><CheckIcon size={20} weight="bold" aria-hidden="true" /></motion.span>
+        </span>
+        <span className="relative grid">
+          <motion.span style={{ opacity: was }} className="col-start-1 row-start-1 font-medium text-fg">{item.without}</motion.span>
+          <motion.span style={{ opacity: now }} className="col-start-1 row-start-1 font-medium tracking-[-0.01em] text-fg">{item.with}</motion.span>
+        </span>
+      </motion.div>
+    </li>
   );
 }
 
-// The page's one scroll-driven moment: as the section scrolls, the tiles behind it sort themselves from scatter into a grid, and
-// the "With" column comes forward as the "Without" column steps back. The motion is the argument, so it is tied to scroll.
+// The page's one scroll-driven moment. Without DelChaos, the work is everywhere: written points lie scattered across the screen over a
+// field of loose dots. As the section scrolls, the dots sort into a grid and each written point travels into an aligned list and turns
+// from the problem into its fix. The motion is the argument, so it is tied to scroll.
 export function BeforeAfter() {
   const ref = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const header = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLUListElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const order = useTransform(scrollYProgress, [0.08, 0.7], [0, 1]);
-  const without = useTransform(order, [0, 0.8], [1, 0.4]);
-  const withOpacity = useTransform(order, [0.1, 0.8], [0.45, 1]);
+  const order = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
+  const settled = useTransform(order, () => 1);
+  const drive = reduce ? settled : order;
+  const before = useTransform(drive, [0.3, 0.5], [1, 0]);
+  const after = useTransform(drive, [0.5, 0.85], [0, 1]);
   return (
-    <section ref={ref} className={reduce ? 'py-[clamp(72px,10vw,140px)]' : 'relative h-[230vh]'}>
-      <div className={reduce ? '' : 'sticky top-16 flex h-[calc(100dvh-4rem)] items-center overflow-hidden'}>
-        <Backdrop3D mode={reduce ? 'still' : 'drive'} drive={order} className="absolute inset-0 opacity-90 [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)]" />
-        <Container className="relative">
+    <section ref={ref} className={reduce ? 'relative h-[100dvh] min-h-[760px]' : 'relative h-[280vh]'}>
+      <div ref={stage} className={reduce ? 'relative h-full overflow-hidden' : 'sticky top-16 h-[calc(100dvh-4rem)] overflow-hidden'}>
+        <PointField order={drive} avoid={[header]} avoidLate={[list]} className="absolute inset-0" />
+        <Container className="relative pt-[clamp(32px,6vh,72px)]">
+          <div ref={header} className="w-fit max-w-full">
           <SectionHeading title="Stop running HR across spreadsheets and chat groups." />
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
-            <Column title="Without DelChaos" items={WITHOUT} opacity={reduce ? 1 : without} />
-            <Column title="With DelChaos" items={WITH} good opacity={reduce ? 1 : withOpacity} />
+          <div className="relative mt-5 min-h-[3.5rem] max-w-[52ch] text-lg leading-relaxed md:text-xl">
+            <motion.p style={{ opacity: reduce ? 0 : before }} className="absolute inset-0 text-muted">
+              <strong className="font-semibold text-fg">Without DelChaos</strong>, work is everywhere: a spreadsheet, a group chat, a paper form, someone&rsquo;s memory.
+            </motion.p>
+            <motion.p style={{ opacity: reduce ? 1 : after }} className="absolute inset-0 text-muted">
+              <strong className="font-semibold text-accent-strong">With DelChaos</strong>, every piece of work has a place, and you can see all of it.
+            </motion.p>
           </div>
+          </div>
+          <ul ref={list} className="relative mt-8 space-y-3">
+            {POINTS.map((item, i) => <Point key={item.with} item={item} index={i} order={drive} stage={stage} />)}
+          </ul>
         </Container>
       </div>
     </section>
