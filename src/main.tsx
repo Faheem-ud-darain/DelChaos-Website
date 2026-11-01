@@ -11,5 +11,5 @@ const app = (
 )
 
 // The built page is prerendered, so hydrate it; the dev server serves an empty root and renders from scratch.
-if (root.hasChildNodes()) hydrateRoot(root, app)
+if (root.firstElementChild) hydrateRoot(root, app)
 else createRoot(root).render(app)

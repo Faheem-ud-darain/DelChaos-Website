@@ -103,3 +103,47 @@ a { text-underline-offset: 0.2em; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* The logo's loop: gentle idle, then a short burst of chaos (the c spins loose, the d swells, the person is thrown up) that settles back into order. 7 s, forever. */
+.dc-mark .dc-d, .dc-mark .dc-c, .dc-mark .dc-head, .dc-mark .dc-body { transform-box: fill-box; transform-origin: center; }
+.dc-mark .dc-c { transform-origin: 58% 50%; animation: dc-c 7s cubic-bezier(.3, 0, .2, 1) infinite; }
+.dc-mark .dc-d { animation: dc-d 7s cubic-bezier(.3, 0, .2, 1) infinite; }
+.dc-mark .dc-head { animation: dc-head 7s cubic-bezier(.3, 0, .2, 1) infinite; }
+.dc-mark .dc-body { transform-origin: 50% 100%; animation: dc-body 7s cubic-bezier(.3, 0, .2, 1) infinite; }
+
+@keyframes dc-c {
+  0%, 22% { transform: rotate(0); }
+  32% { transform: rotate(-5deg); }
+  42%, 58% { transform: rotate(0); }
+  62% { transform: rotate(-90deg); }
+  67% { transform: rotate(140deg); }
+  73% { transform: rotate(-12deg); }
+  78%, 100% { transform: rotate(0); }
+}
+@keyframes dc-d {
+  0%, 58% { transform: scale(1); }
+  62% { transform: scale(1.1); }
+  67% { transform: scale(.92); }
+  73% { transform: scale(1.03); }
+  78%, 100% { transform: scale(1); }
+}
+@keyframes dc-head {
+  0%, 100% { transform: translateY(0) scale(1); }
+  14% { transform: translateY(-5%) scale(1.02, .98); }
+  28% { transform: translateY(0) scale(1); }
+  58% { transform: translateY(0) scale(1); }
+  62% { transform: translateY(-34%) scale(.94, 1.08); }
+  68% { transform: translateY(10%) scale(1.1, .88); }
+  74% { transform: translateY(-4%) scale(.98, 1.02); }
+  80% { transform: translateY(0) scale(1); }
+}
+@keyframes dc-body {
+  0%, 58%, 100% { transform: scaleY(1); }
+  62% { transform: scaleY(.88); }
+  68% { transform: scaleY(1.06); }
+  74% { transform: scaleY(.98); }
+  80% { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dc-mark .dc-c, .dc-mark .dc-d, .dc-mark .dc-head, .dc-mark .dc-body { animation: none; }
+}

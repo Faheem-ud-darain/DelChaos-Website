@@ -1,22 +1,34 @@
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { contactHref, SITE } from '../../site';
 import { DesktopShowcase } from '../app/DesktopShowcase';
 import { Backdrop3D } from '../three/Backdrop3D';
 import { Button } from '../ui/Button';
 import { Container } from '../ui/Container';
-import { Parallax } from '../ui/Parallax';
 import { TextRotate } from '../ui/TextRotate';
 
 // The word that ends the headline. It always comes back to the brand word.
 const CHAOS = ['chaos.', 'errors.', 'delays.', 'drama.'];
 
 export function Hero() {
+  const reduce = useReducedMotion();
+  const { scrollY } = useScroll();
+  // 0 at the top of the page, 1 once the product window has risen over the copy (about 60% of a screen of scrolling).
+  const progress = useTransform(scrollY, y => Math.min(1, Math.max(0, y / (0.6 * (typeof window === 'undefined' ? 800 : window.innerHeight)))));
+  const scale = useTransform(progress, [0, 1], reduce ? [1, 1] : [1, 0.9]);
+  const opacity = useTransform(progress, [0, 0.85], reduce ? [1, 1] : [1, 0]);
+  // The tile field sinks back a little further than the copy, so the window reads as coming forward.
+  const bgScale = useTransform(progress, [0, 1], reduce ? [1, 1] : [1, 0.82]);
+  const bgOpacity = useTransform(progress, [0, 1], reduce ? [1, 1] : [1, 0]);
+  const blur = useTransform(progress, v => (reduce ? 'none' : `blur(${v * 6}px)`));
   return (
-    <section id="top" className="relative overflow-hidden">
-      <Parallax range={[0, 160]} offset={['start start', 'end start']} className="absolute inset-x-0 top-0 h-[880px] [mask-image:radial-gradient(ellipse_90%_70%_at_50%_30%,transparent_22%,black_62%,transparent_92%)]">
-        <Backdrop3D mode="load" className="h-full" />
-      </Parallax>
-      <Container className="relative pt-16 text-center md:pt-24">
-        <Parallax range={[0, -70]} offset={['start start', 'end start']}>
+    <section id="top" className="relative overflow-clip">
+      <div className="pointer-events-none absolute inset-0">
+        <motion.div style={{ scale: bgScale, opacity: bgOpacity }} className="sticky top-0 h-[880px] origin-top [mask-image:radial-gradient(ellipse_90%_70%_at_50%_30%,transparent_22%,black_62%,transparent_92%)]">
+          <Backdrop3D mode="load" className="h-full" />
+        </motion.div>
+      </div>
+      <Container className="sticky top-0 z-0 pt-16 text-center md:pt-24">
+        <motion.div style={{ scale, opacity, filter: blur }} className="origin-top">
         <h1 className="mx-auto max-w-[16ch] text-balance text-6xl font-semibold leading-[0.96] tracking-[-0.035em] sm:text-7xl lg:text-[6rem]">
           Run your people without the <TextRotate texts={CHAOS} className="text-accent-strong" />
         </h1>
@@ -27,9 +39,9 @@ export function Hero() {
           <Button href={contactHref} size="lg">{SITE.contactLabel}</Button>
           <Button href="#features" size="lg" variant="secondary">See what it does</Button>
         </div>
-        </Parallax>
+        </motion.div>
       </Container>
-      <Container className="relative mt-14 pb-24 md:mt-20 md:pb-32">
+      <Container className="relative z-10 mt-14 pb-24 md:mt-20 md:pb-32">
         <DesktopShowcase />
       </Container>
     </section>

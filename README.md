@@ -26,7 +26,7 @@ Or from the terminal: `npm run deploy` (needs `wrangler login` once).
 
 ## Change things
 
-- **Contact address, name, tagline, nav links:** `src/site.ts` (set `contactEmail` before launch).
+- **Contact address, name, tagline, nav links:** `src/site.ts` (email and WhatsApp number live here; the prerender script repeats them in the structured data).
 - **Colours and both themes:** the CSS variables at the top of `src/index.css`. Components use only those tokens, never hex values. The accent is one variable, `--accent`.
 - **Copy:** each section lives in `src/components/sections/`.
 - **Shared pieces:** `src/components/ui/` (button, tabs, accordion, tile, badge, logo, window frame). Use these before writing a new one.

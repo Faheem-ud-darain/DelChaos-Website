@@ -1,0 +1,31 @@
+{
+  "brand": "DelChaos",
+  "tagline": "Run your people without the chaos.",
+  "brief": "HR and workforce operations software: attendance, payroll, leave, onboarding and chat in one system. Sold as a complete product with its full source code, for teams that want to own it. It should feel calm, sharp, human and a little playful, never corporate-stiff.",
+  "adjectives": ["calm", "sharp", "human", "playful"],
+  "criteria": "Success: reads as a person and as dc, works at 16 px and in one colour, uses only black, white and the existing lime, and is distinct from the usual blue HR marks.",
+  "industry": "saas",
+  "nav": ["Features", "Roles", "Ownership", "FAQ"],
+  "brand_color": "#C4EE3F",
+  "greyscale": false,
+  "designer": "DelChaos",
+  "round": 2,
+  "concepts": [
+    {
+      "name": "The dc person",
+      "symbol": "symbol-black.svg",
+      "symbol_on_tile": "symbol-on-dark.svg",
+      "lockup": "logo-horizontal-on-light.svg",
+      "lockup_on_dark": "logo-horizontal-on-dark.svg",
+      "tile_color": "#0A0A0A",
+      "idea": "A person in a collar and tie stands on dc: the d and c share one stroke, and the person is the d's stem.",
+      "rationale": [
+        "The d and c share a stroke, so the name is one shape",
+        "The person is the employee the software exists for",
+        "Heavier small-size cut keeps it clear at 16 px"
+      ]
+    }
+  ],
+  "recommendation": "The dc person: it says employee, name and ownership in one mark, in the three colours the site already uses.",
+  "next_steps": ["Review the guidelines", "Swap it into the site", "Hand the files to design and print"]
+}

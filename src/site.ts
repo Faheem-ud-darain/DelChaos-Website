@@ -2,8 +2,10 @@
 export const SITE = {
   name: 'DelChaos',
   tagline: 'Run your people without the chaos.',
-  // Replace with the real address before launch. Used by every contact button on the page.
-  contactEmail: 'hello@delchaos.com',
+  contactEmail: 'studiosparx@gmail.com',
+  // WhatsApp is the only phone channel. The link form drops the + and spaces.
+  whatsappDisplay: '+90 548 828 18 64',
+  whatsappNumber: '905488281864',
   contactLabel: 'Talk to us',
 } as const;
 
@@ -16,3 +18,5 @@ export const NAV_LINKS = [
 ] as const;
 
 export const contactHref = `mailto:${SITE.contactEmail}?subject=${encodeURIComponent('DelChaos enquiry')}`;
+
+export const whatsappHref = `https://wa.me/${SITE.whatsappNumber}?text=${encodeURIComponent('Hi, I would like to talk about DelChaos.')}`;
