@@ -1,6 +1,6 @@
 // Runs after `vite build` and `vite build --ssr`: renders the page to HTML, fills in the site address and
 // structured data, and writes sitemap.xml, robots.txt and llms.txt. Crawlers then get real content, not an empty div.
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
@@ -8,8 +8,9 @@ const root = resolve(import.meta.dirname, '..');
 const dist = resolve(root, 'dist');
 const serverDir = resolve(root, 'dist-server');
 
-const envFile = readFileSync(resolve(root, '.env'), 'utf8');
-const fromFile = envFile.match(/^SITE_URL=(.+)$/m)?.[1]?.trim();
+// .env is optional (it is gitignored); on Cloudflare the SITE_URL build variable is used instead.
+const envPath = resolve(root, '.env');
+const fromFile = existsSync(envPath) ? readFileSync(envPath, 'utf8').match(/^SITE_URL=(.+)$/m)?.[1]?.trim() : undefined;
 const siteUrl = (process.env.SITE_URL || fromFile || 'https://delchaos.pages.dev').replace(/\/+$/, '');
 
 const { render, faq } = await import(pathToFileURL(resolve(serverDir, 'entry-server.js')).href);
