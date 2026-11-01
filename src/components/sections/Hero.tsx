@@ -11,6 +11,9 @@ import { TextRotate } from '../ui/TextRotate';
 // The word that ends the headline. It always comes back to the brand word.
 const CHAOS = ['chaos.', 'errors.', 'delays.', 'drama.'];
 
+// Where each beam lands along the product window's top edge, as a share of its width, so they frame the headline at any screen width.
+const HERO_BEAMS = [0.12, 0.88] as const;
+
 export function Hero() {
   const surfaceRef = useRef<HTMLDivElement>(null);
   // The product window stays dark until the beam reaches it (see .hero-window in index.css). If the light never arrives, it comes on anyway.
@@ -33,16 +36,16 @@ export function Hero() {
     <section id="top" className="relative overflow-clip">
       <div className="pointer-events-none absolute inset-0">
         <motion.div style={{ opacity: bgOpacity }} className="sticky top-0 h-screen">
-          <LaserBackdrop surfaceRef={surfaceRef} onLit={light} className="absolute inset-0" />
+          <LaserBackdrop surfaceRef={surfaceRef} surfaceFractions={HERO_BEAMS} onLit={light} className="absolute inset-0" />
         </motion.div>
       </div>
       <Container className="sticky top-0 z-0 pt-16 text-center md:pt-24">
         <motion.div style={{ scale, opacity, filter: blur }} className="origin-top">
         <div className="mb-6 flex justify-center"><Badge tone="accent">HR software you own</Badge></div>
-        <h1 className="mx-auto max-w-[16ch] text-balance text-6xl font-semibold leading-[0.96] tracking-[-0.035em] sm:text-7xl lg:text-[6rem]">
+        <h1 className="mx-auto max-w-[16ch] text-balance text-[2.6rem] font-semibold leading-[1] tracking-[-0.035em] sm:text-7xl sm:leading-[0.96] lg:text-[6rem]">
           Run your people without the <TextRotate texts={CHAOS} className="text-accent-strong" />
         </h1>
-        <p className="mx-auto mt-7 max-w-[44ch] text-lg leading-relaxed text-muted md:text-xl">
+        <p className="mx-auto mt-5 max-w-[44ch] text-base leading-relaxed text-muted sm:mt-7 sm:text-lg md:text-xl">
           HR software for attendance, payroll, leave, onboarding and chat, in one system your whole team actually uses.
         </p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">

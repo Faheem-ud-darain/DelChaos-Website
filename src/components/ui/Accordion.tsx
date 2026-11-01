@@ -13,7 +13,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
         const isOpen = open === i;
         return (
           <div key={item.question}>
-            <button type="button" aria-expanded={isOpen} aria-controls={`faq-${i}`} onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left text-lg font-semibold md:px-8">
+            <button type="button" aria-expanded={isOpen} aria-controls={`faq-${i}`} onClick={() => setOpen(isOpen ? null : i)} className="flex w-full items-center justify-between gap-6 px-4 py-4 sm:px-6 sm:py-5 text-left text-lg font-semibold md:px-8">
               {item.question}
               <PlusIcon size={20} className={`shrink-0 text-muted transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`} aria-hidden="true" />
             </button>

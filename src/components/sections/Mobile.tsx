@@ -32,7 +32,7 @@ export function Mobile() {
   }, [seen, light]);
   return (
     <Section className="relative overflow-clip">
-      <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <div className="grid grid-cols-1 items-center gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-20">
         <div ref={column} className="relative">
           <LaserBackdrop surfaceRef={surface} beams={PHONE_BEAM} enabled={seen} onLit={light} className="absolute -inset-x-[45%] -top-40 bottom-0" />
           <Parallax range={[50, -50]} className="relative flex justify-center">

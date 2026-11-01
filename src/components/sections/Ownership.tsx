@@ -39,7 +39,7 @@ export function Ownership() {
     <Section id="ownership">
       <SectionHeading title={<ScrubText text="Buy it once. Own all of it." />}>DelChaos is sold as a complete product. The software, the data and the deployment are yours to run and to change.</SectionHeading>
       <ScrollIn scale={0.93} className="mt-14">
-      <div className="grid gap-10 rounded-2xl border border-line bg-surface p-8 md:grid-cols-2 md:gap-16 md:p-12">
+      <div className="grid grid-cols-1 gap-8 rounded-2xl border border-line bg-surface p-5 sm:p-8 md:grid-cols-2 md:gap-16 md:p-12">
         <List title="What you get" items={YOU_GET} />
         <List title="What stays yours" items={STAYS_YOURS} />
       </div>

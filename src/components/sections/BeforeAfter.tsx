@@ -35,14 +35,18 @@ function Point({ item, index, order, stage }: { item: (typeof POINTS)[number]; i
     const measure = () => {
       const area = box.getBoundingClientRect();
       const home = li.getBoundingClientRect();
-      ox.set(item.scatter.x * area.width - (home.left - area.left));
-      oy.set(item.scatter.y * area.height - (home.top - area.top + sentence.offsetTop));
+      // On a phone the chips scatter only a little sideways and stay below the caption, so none runs off the screen or covers the text.
+      const small = area.width < 640;
+      const sx = small ? 0.02 + (index % 2) * 0.07 : item.scatter.x;
+      const sy = small ? 0.46 + (index / POINTS.length) * 0.5 : item.scatter.y;
+      ox.set(sx * area.width - (home.left - area.left));
+      oy.set(sy * area.height - (home.top - area.top + sentence.offsetTop));
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(box);
     return () => observer.disconnect();
-  }, [item.scatter.x, item.scatter.y, ox, oy, stage]);
+  }, [item.scatter.x, item.scatter.y, index, ox, oy, stage]);
   const p = useTransform(order, v => clamp((v - index * 0.06) / 0.45));
   const x = useTransform([ox, p], ([o, q]: number[]) => o * (1 - q));
   const y = useTransform([oy, p], ([o, q]: number[]) => o * (1 - q));
@@ -53,9 +57,9 @@ function Point({ item, index, order, stage }: { item: (typeof POINTS)[number]; i
     <li ref={row} className="relative">
       <motion.span aria-hidden="true" style={{ opacity: now }} className="absolute inset-0 rounded-2xl border border-fg/15 bg-fg/[0.06] shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] backdrop-blur-xl" />
       <motion.span aria-hidden="true" style={{ opacity: now }} className="absolute right-5 top-1/2 hidden -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.16em] text-muted md:block">{item.tag}</motion.span>
-      <motion.div ref={chip} style={{ x, y, rotate }} className="relative flex w-fit max-w-full items-start gap-3 rounded-2xl px-5 py-3.5 text-lg leading-snug md:max-w-[min(100%,46rem)] md:text-2xl">
+      <motion.div ref={chip} style={{ x, y, rotate }} className="relative flex w-fit max-w-[90%] items-start gap-2.5 rounded-2xl px-3.5 py-2.5 text-[15px] leading-snug sm:gap-3 sm:px-5 sm:py-3.5 sm:text-lg md:max-w-[min(100%,46rem)] md:text-2xl">
         <motion.span aria-hidden="true" style={{ opacity: was }} className="absolute inset-0 rounded-2xl border border-fg/25 bg-fg/[0.09] shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_12px_32px_-12px_rgb(0_0_0/0.7)] backdrop-blur-xl" />
-        <span className="relative mt-1.5 h-5 w-5 shrink-0 md:mt-2">
+        <span className="relative mt-0.5 h-5 w-5 shrink-0 sm:mt-1.5 md:mt-2">
           <motion.span style={{ opacity: was }} className="absolute inset-0 text-fg"><XIcon size={20} weight="bold" aria-hidden="true" /></motion.span>
           <motion.span style={{ opacity: now }} className="absolute inset-0 text-accent-strong"><CheckIcon size={20} weight="bold" aria-hidden="true" /></motion.span>
         </span>
@@ -90,7 +94,7 @@ export function BeforeAfter() {
         <Container className="relative pt-[clamp(32px,6vh,72px)]">
           <div ref={header} className="w-fit max-w-full">
           <SectionHeading title="Stop running HR across spreadsheets and chat groups." />
-          <div className="relative mt-5 min-h-[3.5rem] max-w-[52ch] text-lg leading-relaxed md:text-xl">
+          <div className="relative mt-4 min-h-[4.5rem] max-w-[52ch] text-base leading-relaxed sm:mt-5 sm:min-h-[3.5rem] sm:text-lg md:text-xl">
             <motion.p style={{ opacity: reduce ? 0 : before }} className="absolute inset-0 text-muted">
               <strong className="font-semibold text-fg">Without DelChaos</strong>, work is everywhere: a spreadsheet, a group chat, a paper form, someone&rsquo;s memory.
             </motion.p>
@@ -99,7 +103,7 @@ export function BeforeAfter() {
             </motion.p>
           </div>
           </div>
-          <ul ref={list} className="relative mt-8 space-y-3">
+          <ul ref={list} className="relative mt-5 space-y-2 sm:mt-8 sm:space-y-3">
             {POINTS.map((item, i) => <Point key={item.with} item={item} index={i} order={drive} stage={stage} />)}
           </ul>
         </Container>

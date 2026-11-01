@@ -36,9 +36,9 @@ function Arrive({ enter, children }: { enter: Enter; children: ReactNode }) {
 function Row({ item, index }: { item: Problem; index: number }) {
   const { problem, fix, points, Preview, enter, lime } = item;
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
+    <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-20">
       <div className={index % 2 ? 'lg:order-2' : ''}>
-        <h3 className="text-balance text-4xl font-semibold leading-[1.05] tracking-[-0.03em] md:text-5xl">{index % 3 === 0 ? <ScrubText text={problem} /> : problem}</h3>
+        <h3 className="text-balance text-3xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-4xl md:text-5xl">{index % 3 === 0 ? <ScrubText text={problem} /> : problem}</h3>
         <p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-muted"><span className="font-semibold text-fg">DelChaos: </span>{fix}</p>
         <ul className="mt-7 space-y-3">
           {points.map(point => (

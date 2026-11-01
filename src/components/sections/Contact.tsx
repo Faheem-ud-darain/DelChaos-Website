@@ -17,11 +17,11 @@ export function Contact() {
   return (
     <Section id="contact">
       <ScrollIn scale={0.88}>
-      <div ref={card} className="relative overflow-hidden rounded-2xl border border-accent-strong bg-surface px-7 py-14 md:px-16 md:py-20">
+      <div ref={card} className="relative overflow-hidden rounded-2xl border border-accent-strong bg-surface px-5 py-10 sm:px-7 sm:py-14 md:px-16 md:py-20">
         <LightfallBackdrop enabled={seen} className="absolute inset-0 [mask-image:linear-gradient(to_right,rgb(0_0_0/0.35),black_75%)]" />
-        <h2 className="relative max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">Talk to us about owning DelChaos.</h2>
+        <h2 className="relative max-w-3xl text-balance text-[1.9rem] font-semibold leading-[1.08] tracking-tight sm:text-4xl md:text-6xl">Talk to us about owning DelChaos.</h2>
         <p className="relative mt-5 max-w-[52ch] text-lg leading-relaxed text-muted">Tell us about your team and we will reply with how a handover would work.</p>
-        <div className="relative mt-9 flex flex-wrap items-center gap-3">
+        <div className="relative mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center [&>*]:w-full [&>*]:justify-center sm:[&>*]:w-auto">
           <Button href={contactHref} size="lg">{SITE.contactLabel}</Button>
           <Button href={whatsappHref} size="lg" variant="secondary">
             <WhatsappLogoIcon size={18} weight="fill" aria-hidden="true" />

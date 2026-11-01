@@ -28,16 +28,16 @@ export function Roles() {
   return (
     <Section id="roles">
       <SectionHeading title="One system, four views.">Everyone sees what their job needs and nothing more.</SectionHeading>
-      <div className="mt-14 grid gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
+      <div className="mt-10 grid grid-cols-1 gap-6 md:mt-14 md:gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
         <Reveal from="left"><Tabs items={ROLE_TABS} value={role} onChange={setRole} label="Role" idPrefix="role" /></Reveal>
         <Reveal from="right" delay={0.1} className="min-w-0">
-        <div id="role-panel" role="tabpanel" aria-labelledby={`role-${role}`} className="min-h-[360px] rounded-2xl border border-line bg-surface p-7 md:p-10">
+        <div id="role-panel" role="tabpanel" aria-labelledby={`role-${role}`} className="min-h-[300px] rounded-2xl border border-line bg-surface p-5 md:min-h-[360px] md:p-10">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={role} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}>
-              <h3 className="text-2xl font-semibold tracking-tight md:text-3xl">{can.title}</h3>
-              <ul className="mt-8 space-y-4">
+              <h3 className="text-xl font-semibold tracking-tight md:text-3xl">{can.title}</h3>
+              <ul className="mt-6 space-y-3.5 md:mt-8 md:space-y-4">
                 {can.points.map((point, i) => (
-                  <motion.li key={point} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 + i * 0.05, duration: 0.25 }} className="flex items-start gap-3 text-lg leading-snug">
+                  <motion.li key={point} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 + i * 0.05, duration: 0.25 }} className="flex items-start gap-3 text-base leading-snug md:text-lg">
                     <CheckCircleIcon size={24} weight="fill" className="mt-0.5 shrink-0 text-accent-strong" aria-hidden="true" />
                     {point}
                   </motion.li>

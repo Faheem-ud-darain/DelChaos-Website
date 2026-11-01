@@ -17,7 +17,7 @@ export function HowItWorks() {
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 28 });
   return (
     <Section id="how" className="bg-surface-2/50">
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
+      <div className="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
         <SectionHeading title="From first hire to payday." className="lg:sticky lg:top-28 lg:self-start" />
         <ol ref={ref} className="relative space-y-16 pl-10 md:pl-14">
           <span aria-hidden="true" className="absolute bottom-2 left-[7px] top-2 w-0.5 bg-line" />
@@ -25,7 +25,7 @@ export function HowItWorks() {
           {STEPS.map(step => (
             <li key={step.title} className="relative">
               <span aria-hidden="true" className="absolute -left-10 top-2 h-4 w-4 rounded-full border-2 border-accent-strong bg-bg md:-left-14" />
-              <h3 className="text-3xl font-semibold tracking-tight md:text-4xl">{step.title}</h3>
+              <h3 className="text-2xl font-semibold tracking-tight md:text-4xl">{step.title}</h3>
               <p className="mt-3 max-w-[48ch] text-lg leading-relaxed text-muted">{step.body}</p>
             </li>
           ))}
