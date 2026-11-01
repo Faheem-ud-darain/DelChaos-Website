@@ -16,12 +16,13 @@ const siteUrl = (process.env.SITE_URL || fromFile || 'https://delchaos.pages.dev
 const { render, faq } = await import(pathToFileURL(resolve(serverDir, 'entry-server.js')).href);
 
 const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'DelChaos', url: siteUrl },
   {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'DelChaos',
     url: siteUrl,
-    logo: `${siteUrl}/favicon.svg`,
+    logo: `${siteUrl}/icon-512.png`,
     email: 'studiosparx@gmail.com',
     contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'studiosparx@gmail.com', telephone: '+905488281864', availableLanguage: 'English' },
   },
@@ -34,6 +35,8 @@ const jsonLd = [
     description: 'Attendance, payroll, leave, onboarding and chat in one HR system, sold as a complete product with its full source code.',
     url: siteUrl,
     image: `${siteUrl}/og.png`,
+    publisher: { '@type': 'Organization', name: 'DelChaos', url: siteUrl },
+    featureList: ['Attendance and shift tracking', 'Payroll built from attendance and leave', 'Leave requests and approvals', 'Guided employee onboarding', 'Team chat, tickets and an assistant', 'Full source code included'],
   },
   {
     '@context': 'https://schema.org',
